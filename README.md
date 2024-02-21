@@ -6,3 +6,4 @@ This module was specifically developed for our bachelor project, where needed to
 
 The purpose of this module is thus to simplify the interaction with these modules and provide structured output that can be more easily used.
 
+Please see the `docs` folder for documentation.
