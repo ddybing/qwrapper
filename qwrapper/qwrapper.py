@@ -5,7 +5,7 @@ from qemu.qmp import QMPClient
 import pygdbmi
 
 
-class QWrapper:
+class QemuMachine:
     def __init__(self):
         pass
 
@@ -22,4 +22,11 @@ class QWrapper:
         pass
 
 
-    
+class X86Machine:
+    pass
+
+class PPCMachine:
+    pass
+
+class M68KMachine:
+    pass
