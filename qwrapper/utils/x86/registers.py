@@ -84,36 +84,12 @@ async def get_all_cpu_registers():
 
     return registers
 
-async def get_register(requested_register):
-    registers = await get_all_cpu_registers
 
+async def get_register(register):
+    registers = await get_all_cpu_registers()
 
-
-
-    if requested_register in registers:
-        return registers[requested_register]
-    else:
-        return None
-
-
-
-async def get_gdt_register():
-    """
-    Returns the contents of the GDT register in the form of an array with base and limit.
-    
-    This function retrieves the GDT register value by parsing the raw CPU registers.
-    It searches for the GDT value using a regular expression and extracts the base and limit values.
-    The base and limit values are then stored in an array and returned.
-    """
-    all_registers = await get_all_cpu_registers_raw()
-
-    # GDT pointer, first value is base, second is limit.
-    gdtptr = [0x0, 0x0]
-    match = re.search(r'GDT=\s*([0-9a-fA-F]+)\s*([0-9a-fA-F]+)', all_registers)
-    if match:
-        gdt_value1 = int(match.group(1), 16)
-        gdt_value2 = int(match.group(2), 16)
-        gdtptr[0] = gdt_value1
-        gdtptr[1] = gdt_value2
-
-    return gdtptr
+    requested_register = register.lower()
+    for key in registers.keys():
+        if key.lower() == requested_register:
+            return registers[key]
+    return None
