@@ -21,6 +21,7 @@ class QemuMachine(ABC):
         # This method is called when the object is deleted by garbage collector.
         pass
 
+    @abstractmethod
     def cleanup(self):
         # This method cleans up the QEMU instance and frees up the resources. 
         pass
@@ -37,7 +38,15 @@ class X86Machine(QemuMachine):
             # Start Qemu with gdb stub and QMP Server. Add the kernel and disk images.
             # Virtual machine starts in "wait" mode. Waits for user to start VM execution.
             self.QemuProcess = subprocess.Popen(qemuCmd)
-
+            atexit.register(self.cleanup)
+        
+        def cleanup(self):
+            print("Shutting down QEMU machine...")
+            self.QemuProcess.terminate()
+            self.QemuProcess.wait()
+            print("QEMU machine has been shut down")
+            
+             
 
         # This function gets all the registers and returns a dictionary containing every register and the corresponding values.
         def get_all_registers(self):
