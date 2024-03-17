@@ -33,4 +33,10 @@ class X86Machine(QemuMachine):
                 return None
             regs = asyncio.run(registers.get_all_cpu_registers())
             return regs
-
+        
+        def get_register(self, requested_register):
+            if self.QemuProcess.poll is None:
+                print("QEMU process has not been initialised yet.")
+                return None
+            register = asyncio.run(registers.get_register(requested_register))
+            return register
