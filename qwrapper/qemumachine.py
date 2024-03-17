@@ -39,7 +39,7 @@ class X86Machine(QemuMachine):
             print("Setting up virtual machine...")
             # Start Qemu with gdb stub and QMP Server. Add the kernel and disk images.
             # Virtual machine starts in "wait" mode. Waits for user to start VM execution.
-            self.QemuProcess = subprocess.Popen(qemuCmd)
+            self.QemuProcess = subprocess.Popen(qemuCmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             # Wait 2 seconds to allow QEMU to create the socket file
             time.sleep(2) 
