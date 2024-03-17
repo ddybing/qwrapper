@@ -2,6 +2,7 @@ import subprocess
 import os
 import asyncio
 
+from qemu.qmp import QMPClient
 
 
 from abc import ABC, abstractmethod
@@ -48,7 +49,5 @@ class X86Machine(QemuMachine):
             asyncio.run(qmp.connect('/tmp/qmp.sock'))
 
             result = asyncio.run(qmp.execute('query-status'))
-
-
 
             pass
