@@ -12,7 +12,7 @@ async def get_all_cpu_registers_raw():
 
 
 def generate_register_pattern(register_name, number_of_blocks):
-    return (register_name, f'{register_name}=' + r'\s*'.join(['([0-9a-fA-F]+)'] * number_of_blocks))
+    return (register_name, f'{register_name}=\s*' + r'\s*'.join(['([0-9a-fA-F]+)'] * number_of_blocks))
 
 
 async def get_all_cpu_registers():
@@ -22,37 +22,66 @@ async def get_all_cpu_registers():
 
     registers = {}
 
-    register_patterns = [
-        ('EAX', 'EAX=([0-9a-fA-F]+)'),
-        ('EBX', 'EBX=([0-9a-fA-F]+)'),
-        ('ECX', 'ECX=([0-9a-fA-F]+)'),
-        ('EDX', 'EDX=([0-9a-fA-F]+)'),
-        ('ESI', 'ESI=([0-9a-fA-F]+)'),
-        ('EDI', 'EDI=([0-9a-fA-F]+)'),
-        ('EBP', 'EBP=([0-9a-fA-F]+)'),
-        ('ESP', 'ESP=([0-9a-fA-F]+)'),
-        ('EIP', 'EIP=([0-9a-fA-F]+)'),
-        ('EFL', 'EFL=([0-9a-fA-F]+)'),
+    # This is a list of the registers to look for and match against. 
+    # The second value is the number of hexadecimal "blocks" to match for.
+    # E.g. GDT has 2, as there is both a base and a limit, separated by a space in the output from QMP.
+    register_nums = [
+        ('EAX', 1),
+        ('EBX', 1),
+        ('ECX', 1),
+        ('EDX', 1),
+        ('ESI', 1),
+        ('EDI', 1),
+        ('EBP', 1),
+        ('ESP', 1),
+        ('EIP', 1),
+        ('EFL', 1),
 
-        ('GDT', r'GDT=\s*([0-9a-fA-F]+)\s+([0-9a-fA-F]+)'),
-        ('IDT', r'GDT=\s*([0-9a-fA-F]+)\s+([0-9a-fA-F]+)'),
+        ('GDT', 2),
+        ('IDT', 2),
 
-        ('CR0', 'CR0=([0-9a-fA-F]+)'),
+        ('CR0', 1),
+        ('CR2', 1),
+        ('CR3', 1),
+        ('CR4', 1),
+        ('DR0', 1),
+        ('DR1', 1),
+        ('DR2', 1),
+        ('DR3', 1),
+        ('DR6', 1),
+        ('DR7', 1),
+        ('EFER', 1),
+        
+        ('FPR0', 2),
+        ('FPR1', 2),
+        ('FPR2', 1),
+        ('FPR3', 1),
+        ('FPR4', 1),
+        ('FPR5', 1),
+        ('FPR6', 1),
+        ('FPR7', 1),
 
+        ('XMM00', 1),
+        ('XMM01', 1),
+        ('XMM02', 1),
+        ('XMM03', 1),
+        ('XMM04', 1),
+        ('XMM05', 1),
+        ('XMM06', 1),
+        ('XMM07', 1)
 
     ]
 
-    two_value_registers = ['GDT', 'IDT']
+    register_patterns = []
+
+    for register in register_nums:
+        register_patterns.append(generate_register_pattern(register[0], register[1]))
+
     for register, pattern in register_patterns:
         match = re.search(pattern, regs_output)
         if match:
-            if register in two_value_registers:
-                registers[register] = [match.group(1), match.group(2)]
-            else:
-                registers[register] = match.group(1)
+            registers[register] = [match.group(i) for i in range(1, len(match.groups())+1)]
 
-    print(regs_output)
-    print(registers['CR0'])
     return registers
 
 async def get_register(requested_register):
