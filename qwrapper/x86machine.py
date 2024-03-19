@@ -1,5 +1,6 @@
 from qwrapper.qemumachine import QemuMachine
 from qwrapper.utils.x86 import registers
+from qwrapper.utils.x86 import machinestate
 from qemu.qmp import QMPClient
 import time
 import os
@@ -19,11 +20,39 @@ class X86Machine(QemuMachine):
             time.sleep(2) 
         
         def __del__(self):
-            print("Shutting down QEMU machine...")
+            self.cleanup()
+
+        def stop(self):
+            # Stop/pause the execution of virtual machine
+            asyncio.run(machinestate.stop_machine())
+            pass
+
+        def reset(self):
+            # Resets the virtual machine (does not resume execution)
+            pass
+
+        def start(self):
+            # Start/resume the execution of the virtual machine
+            asyncio.run(machinestate.start_machine())
+            pass
+
+        def get_state(self):
+            state = asyncio.run(machinestate.get_machine_state())
+            return state
+
+            
+
+        def cleanup(self):
+            print("Shutting down QEMU machine and cleaning up...")
             self.QemuProcess.terminate()
             self.QemuProcess.wait()
-            print("QEMU machine has been shut down")
             
+            # wait for any updates to the file system before checking 
+            # and deleting the socket file.
+            time.sleep(1)
+            if (os.path.exists("/tmp/qmp.socket")):
+                os.remove("/tmp/qmp.socket")
+            print("QEMU machine has been shut down")
              
 
         # This function gets all the registers and returns a dictionary containing every register and the corresponding values.

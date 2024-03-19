@@ -4,9 +4,6 @@ import asyncio
 import atexit
 import time
 
-from qemu.qmp import QMPClient
-
-
 
 
 from abc import ABC, abstractmethod
@@ -20,11 +17,22 @@ class QemuMachine(ABC):
     def start(self):
         # This method starts the QEMU instance.
         pass
+    
+    @abstractmethod
+    def reset():
+        pass
+
+    @abstractmethod
+    def get_state():
+        pass
 
     def __del__(self):
         # This method is called when the object is deleted or goes out of scope.
         pass
-
+    
+    @abstractmethod
+    def stop(self):
+        pass
     
     def cleanup(self):
         # This method cleans up the QEMU instance and frees up the resources. 
