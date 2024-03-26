@@ -1,13 +1,16 @@
 from qwrapper.qemumachine import QemuMachine
-from qwrapper.utils.x86 import registers
-from qwrapper.utils.x86 import machinestate
+from .utils import registers
+from .utils import machinestate
 from qemu.qmp import QMPClient
+import pygdbmi.gdbcontroller as gdbcontroller
 import time
 import os
 import subprocess
 import asyncio
 
 class X86Machine(QemuMachine):
+        gdbControl = gdbcontroller.GdbController()
+
         def __init__(self):
             super().__init__()
             qemuCmd = ['qemu-system-i386', '-display', 'none', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=on', '-hda', 'kernel.iso', '-hdb', 'disk.iso']
@@ -18,6 +21,7 @@ class X86Machine(QemuMachine):
 
             # Wait 2 seconds to allow QEMU to create the socket file
             time.sleep(2) 
+        
         
         def __del__(self):
             self.cleanup()
@@ -35,12 +39,13 @@ class X86Machine(QemuMachine):
             # Start/resume the execution of the virtual machine
             asyncio.run(machinestate.start_machine())
             pass
+        
+        def set_breakpoint(self, symbol):
+            pass
 
         def get_state(self):
             state = asyncio.run(machinestate.get_machine_state())
             return state
-
-            
 
         def cleanup(self):
             print("Shutting down QEMU machine and cleaning up...")

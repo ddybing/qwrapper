@@ -4,12 +4,6 @@
 from qemu.qmp import QMPClient 
 import re
 
-async def get_all_cpu_registers_raw():
-    qmp = QMPClient('x86')
-    await qmp.connect('/tmp/qmp.socket')
-    regs_output = await qmp.execute('human-monitor-command', {'command-line' : 'info registers'})
-    return regs_output
-
 
 def generate_register_pattern(register_name, number_of_blocks):
     return (register_name, f'{register_name}=\s*' + r'\s*'.join(['([0-9a-fA-F]+)'] * number_of_blocks))
@@ -17,7 +11,7 @@ def generate_register_pattern(register_name, number_of_blocks):
 
 async def get_all_cpu_registers():
     qmp = QMPClient('x86')
-    await qmp.connect('/tmp/qmp.socket')
+    con_result = await qmp.connect("/tmp/qmp.socket")
     regs_output = await qmp.execute('human-monitor-command', {'command-line' : 'info registers'})
 
     registers = {}
