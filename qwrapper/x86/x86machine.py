@@ -1,6 +1,7 @@
 from qwrapper.qemumachine import QemuMachine
 from .utils import registers
 from .utils import machinestate
+from .utils import debugging
 from qemu.qmp import QMPClient
 import pygdbmi.gdbcontroller as gdbcontroller
 import time

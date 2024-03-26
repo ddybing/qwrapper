@@ -1,5 +1,6 @@
 import pygdbmi.gdbcontroller as gdbcontroller
 
 
-def set_breakpoint(adress):
+def set_breakpoint(gdbcontroller, adress):
+
     pass
