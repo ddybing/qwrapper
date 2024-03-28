@@ -11,18 +11,23 @@ import asyncio
 
 class X86Machine(QemuMachine):
         gdbControl = gdbcontroller.GdbController()
+        gdbConnected = False
+        qemuCmd = []
 
-        def __init__(self):
+        def __init__(self, qmpwait):
             super().__init__()
-            qemuCmd = ['qemu-system-i386', '-display', 'none', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=on', '-hda', 'kernel.iso', '-hdb', 'disk.iso']
+            if qmpwait == True:
+                self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=on', '-hda', 'kernel.iso', '-hdb', 'disk.iso']
+            if qmpwait == False:
+                self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=off', '-hda', 'kernel.iso', '-hdb', 'disk.iso']
+
             print("Setting up virtual machine...")
             # Start Qemu with gdb stub and QMP Server. Add the kernel and disk images.
             # Virtual machine starts in "wait" mode. Waits for user to start VM execution.
-            self.QemuProcess = subprocess.Popen(qemuCmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.QemuProcess = subprocess.Popen(self.qemuCmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             # Wait 2 seconds to allow QEMU to create the socket file
             time.sleep(2) 
-        
         
         def __del__(self):
             self.cleanup()
@@ -30,7 +35,6 @@ class X86Machine(QemuMachine):
         def stop(self):
             # Stop/pause the execution of virtual machine
             asyncio.run(machinestate.stop_machine())
-            pass
 
         def reset(self):
             # Resets the virtual machine (does not resume execution)
@@ -39,10 +43,9 @@ class X86Machine(QemuMachine):
         def start(self):
             # Start/resume the execution of the virtual machine
             asyncio.run(machinestate.start_machine())
-            pass
         
         def set_breakpoint(self, symbol):
-            pass
+            status = asyncio.run(debugging.set_breakpoint(self.gdbControl, symbol))
 
         def get_state(self):
             state = asyncio.run(machinestate.get_machine_state())
