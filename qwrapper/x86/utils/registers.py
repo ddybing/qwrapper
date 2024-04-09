@@ -86,8 +86,5 @@ async def get_register(register):
     for key in registers.keys():
         if key.lower() == requested_register:
             value = registers[key]
-            if not isinstance(value, list):
-                return value
-            else:
-                return value[0]
+            return value
     return None
