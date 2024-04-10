@@ -10,7 +10,9 @@ def format_qemu_memory_output(output):
         elements = line.split(' ')[1:]
         memory_list.extend([elem for elem in elements if elem and ':' not in elem])
 
-
+    # Remove escape characters before returning the memory list.
+    memory_list = [elem.replace('\r', '').replace('\n', '') for elem in memory_list]
+    memory_list = [re.sub(r'\x1b[^m]*m', '', elem) for elem in memory_list]
     return memory_list
 
 

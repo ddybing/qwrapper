@@ -82,6 +82,7 @@ async def get_all_cpu_registers():
         if match:
             registers[register] = [match.group(i) for i in range(1, len(match.groups())+1)]
 
+    
     return registers
 
 
