@@ -2,6 +2,7 @@ from qwrapper.qemumachine import QemuMachine
 from .utils import registers
 from .utils import machinestate
 from .utils import debugging
+from .utils import memory
 from qemu.qmp import QMPClient
 import pygdbmi.gdbcontroller as gdbcontroller
 import time
@@ -78,3 +79,13 @@ class X86Machine(QemuMachine):
                 return None
             register = asyncio.run(registers.get_register(requested_register))
             return register
+        
+        # Memory functionality
+
+        def read_memory_bytes(self, startaddress, number_of_bytes):
+            if self.QemuProcess.poll is None:
+                print("QEMU process has not been initialised yet")
+                return None
+            memory_list = asyncio.run(memory.read_memory_bytes(startaddress, number_of_bytes))
+            return memory_list
+
