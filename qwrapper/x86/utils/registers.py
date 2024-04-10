@@ -6,7 +6,7 @@ import re
 
 
 def generate_register_pattern(register_name, number_of_blocks):
-    return (register_name, f'{register_name}=\s*' + r'\s*'.join(['([0-9a-fA-F]+)'] * number_of_blocks))
+    return (register_name, f'{register_name}\s*=\s*' + r'\s*'.join(['([0-9a-fA-F]+)'] * number_of_blocks))
 
 
 async def get_all_cpu_registers():
@@ -20,6 +20,13 @@ async def get_all_cpu_registers():
     # The second value is the number of hexadecimal "blocks" to match for.
     # E.g. GDT has 2, as there is both a base and a limit, separated by a space in the output from QMP.
     register_nums = [
+        ('CS', 2),
+        ('DS', 2),
+        ('ES', 2),
+        ('FS', 2),
+        ('GS', 2),
+        ('SS', 2),
+
         ('EAX', 1),
         ('EBX', 1),
         ('ECX', 1),
@@ -63,7 +70,6 @@ async def get_all_cpu_registers():
         ('XMM05', 1),
         ('XMM06', 1),
         ('XMM07', 1)
-
     ]
 
     register_patterns = []
