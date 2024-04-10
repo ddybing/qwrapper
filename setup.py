@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='qwrapper',
-    version='0.1.11',
+    version='0.1.12',
     description='A QEMU wrapper for Python',
     author='Daniel Dybing',
     author_email='danieldy@uia.no',
