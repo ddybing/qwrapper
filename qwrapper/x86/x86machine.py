@@ -15,12 +15,24 @@ class X86Machine(QemuMachine):
         gdbConnected = False
         qemuCmd = []
 
-        def __init__(self, qmpwait):
+        def __init__(self, disk_images, qmpwait=False,):
             super().__init__()
+
+            self.disk_counter = ord('a') # Initial disk value
+
             if qmpwait == True:
-                self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=on', '-hda', 'kernel.iso', '-hdb', 'disk.iso']
+                self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=on']
             if qmpwait == False:
-                self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=off', '-hda', 'kernel.iso', '-hdb', 'disk.iso']
+                self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=off']
+
+            for image in disk_images:
+                if self.disk_counter > ord('z'):
+                    print("Error: Too many disk images")
+                    break
+                self.qemuCmd.append('-hd' + chr(self.disk_counter))
+                self.qemuCmd.append(image)
+                self.disk_counter += 1
+            
 
             print("Setting up virtual machine...")
             # Start Qemu with gdb stub and QMP Server. Add the kernel and disk images.
