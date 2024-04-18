@@ -7,7 +7,7 @@ description = "A QEMU wrapper for Python"
 readme = "README.md"
 requires-python = ">=3.7"
 authors = [{ name = "Daniel Dybing", email = "danieldy@uia.no" },
-           { name = "Ali Sirvanovitsj Ismailov", email = "alisi18@uia.no",
+           { name = "Ali Sirvanovitsj Ismailov", email = "alisi18@uia.no"},
            { name = "Sirén Elise Lund Lohre", email = "selohre@uia.no"}]
 classifiers = [
     "Programming Language :: Python :: 3",
