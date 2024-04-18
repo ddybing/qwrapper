@@ -4,6 +4,9 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/qwrapper)
 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/qwrapper)
+
+
 
 QWrapper is a Python module meant to make automated interactions with QEMU (Quick EMUlator) easier. By the use of the existing Python modules `pygdbmi` and `qemu.qmp`, this modules communicates with a QEMU virtual machine instance and provides a simple interface for the developer to control the VM and extract useful information. 
 
