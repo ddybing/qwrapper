@@ -14,6 +14,7 @@ class X86Machine(QemuMachine):
         gdbControl = gdbcontroller.GdbController()
         gdbConnected = False
         qemuCmd = []
+        QemuProcess = None
 
         def __init__(self, disk_images, qmpwait=False,):
             super().__init__()
@@ -66,8 +67,9 @@ class X86Machine(QemuMachine):
 
         def cleanup(self):
             print("Shutting down QEMU machine and cleaning up...")
-            self.QemuProcess.terminate()
-            self.QemuProcess.wait()
+            if not self.QemuProcess is None:
+                self.QemuProcess.terminate()
+                self.QemuProcess.wait()
             
             # wait for any updates to the file system before checking 
             # and deleting the socket file.
