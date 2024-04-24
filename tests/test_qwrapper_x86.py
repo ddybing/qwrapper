@@ -14,7 +14,7 @@ def test_x86_machine_memory():
 
 # Create machine and add disk files
 def test_x86machine_diskimages():
-    machine = X86Machine("disk.iso", "disk2.iso")
+    machine = X86Machine(["disk.iso", "disk2.iso"])
     assert machine is not None
 
     # Check if the machine boots the disk images.
