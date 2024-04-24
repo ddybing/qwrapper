@@ -17,6 +17,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install build
         pip install .
+        sudo apt install -y gdb qemu-system-i386
     - name: Build
       run: |
         python -m build
