@@ -5,8 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
@@ -25,8 +23,6 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:latest
 
     steps:
     - uses: actions/checkout@v2
