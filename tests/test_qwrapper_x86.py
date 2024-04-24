@@ -3,24 +3,22 @@ import time
 from pygdbmi import gdbcontroller
 
 # Create a machine
-def test_x86machine_start(request):
+def test_x86machine_start():
     machine = X86Machine()
 
 
-    machine.cleanup()
 
 
 # Create machine and read memory
-def test_x86_machine_memory(request):
+def test_x86_machine_memory():
     machine = X86Machine()
 
     memory = machine.read_memory_bytes(0x0, 100)
 
-    machine.cleanup()
     assert memory is not None
 
 # Create machine and add disk files
-def test_x86machine_diskimages(request):
+def test_x86machine_diskimages():
     machine = X86Machine(['tests/disk.iso', 'tests/disk2.iso'], False)
 
 
@@ -32,11 +30,6 @@ def test_x86machine_diskimages(request):
     '0x72', '0x07', '0x6c', '0x07', '0x64', '0x07']
 
     machine.start()
-    time.sleep(10)
     screen_memory = machine.read_memory_bytes(0xB8000, 22)
-    machine.cleanup()
 
     assert screen_memory == VGA_MEMORY
-
-
-    
