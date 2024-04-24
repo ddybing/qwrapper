@@ -16,7 +16,7 @@ class X86Machine(QemuMachine):
         qemuCmd = []
         QemuProcess = None
 
-        def __init__(self, disk_images=[], qmpwait=False,):
+        def __init__(self, disk_images=None, qmpwait=False):
             super().__init__()
 
             self.disk_counter = ord('a') # Initial disk value
@@ -26,13 +26,14 @@ class X86Machine(QemuMachine):
             if qmpwait == False:
                 self.qemuCmd = ['qemu-system-i386', '-display', 'none', '-S', '-s', '-qmp', 'unix:/tmp/qmp.socket,server=on,wait=off']
 
-            for image in disk_images:
-                if self.disk_counter > ord('z'):
-                    print("Error: Too many disk images")
-                    break
-                self.qemuCmd.append('-hd' + chr(self.disk_counter))
-                self.qemuCmd.append(image)
-                self.disk_counter += 1
+            if disk_images:
+                for image in disk_images:
+                    if self.disk_counter > ord('z'):
+                        print("Error: Too many disk images")
+                        break
+                    self.qemuCmd.append('-hd' + chr(self.disk_counter))
+                    self.qemuCmd.append(image)
+                    self.disk_counter += 1
             
 
             print("Setting up virtual machine...")
