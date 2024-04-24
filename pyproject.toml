@@ -14,6 +14,8 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 
+dependencies = ["pygdbmi", "qemu.qmp"]
+
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
