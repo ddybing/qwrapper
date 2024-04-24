@@ -16,7 +16,7 @@ class X86Machine(QemuMachine):
         qemuCmd = []
         QemuProcess = None
 
-        def __init__(self, disk_images, qmpwait=False,):
+        def __init__(self, disk_images=[], qmpwait=False,):
             super().__init__()
 
             self.disk_counter = ord('a') # Initial disk value
