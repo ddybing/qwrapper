@@ -40,4 +40,4 @@ jobs:
         sudo apt install -y gdb qemu-system-i386
     - name: Test with pytest
       run: |
-        pytest
+        pytest -v
