@@ -5,7 +5,8 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: self-hosted
-
+    container:
+      image: ubuntu:latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
@@ -24,6 +25,8 @@ jobs:
   test:
     needs: build
     runs-on: self-hosted
+    container:
+      image: ubuntu:latest
 
     steps:
     - uses: actions/checkout@v2
