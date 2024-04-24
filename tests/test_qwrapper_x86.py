@@ -1,5 +1,6 @@
 from qwrapper.x86 import X86Machine
 import time
+from pygdbmi import gdbcontroller
 
 # Create a machine
 def test_x86machine():
@@ -25,6 +26,9 @@ def test_x86machine_diskimages():
     0x72, 0x07, 0x6C, 0x07, 0x64, 0x07
     ]
 
+    gdb = gdbcontroller.GdbController()
+    gdb.write("target remote tcp::1234")
+    gdb.write("c")
     time.sleep(10)
     screen_memory = machine.read_memory_bytes(0xB8000, 22)
     assert screen_memory == VGA_MEMORY
