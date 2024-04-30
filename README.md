@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" />
+  <img src="https://raw.githubusercontent.com/ddybing/qwrapper/main/logo.png" />
 </p>
 
 
